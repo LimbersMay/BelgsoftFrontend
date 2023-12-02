@@ -6,11 +6,11 @@ export const AuthLayout = ({ children }: { children: ReactElement }) => {
     const navLinks = [
         {
             name: "Login",
-            path: "/login"
+            path: "/auth/login"
         },
         {
             name: "Register",
-            path: "/register"
+            path: "/auth/register"
         }
     ]
 
