@@ -14,17 +14,21 @@ interface BaseLayoutProps {
 export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
 
     const isActiveLink = ({ isActive}: { isActive: boolean}) => {
+
+        const baseClasses = "rounded-md p-2";
+
         if (isActive) {
-            return "text-neutral-200"
+            return `${baseClasses} bg-neutral-800 text-neutral-100`;
         }
-        return "text-neutral-400"
+
+        return `${baseClasses} hover:bg-neutral-800 hover:text-neutral-100 text-neutral-400`;
     }
 
     return (
         <div>
             <header className="flex justify-between bg-neutral-900 p-4 text-xl">
 
-                <div className="font-bold">
+                <div className="self-center font-bold">
                     <NavLink
                         to="/"
                         className={isActiveLink}
@@ -33,7 +37,7 @@ export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
                     </NavLink>
                 </div>
 
-                <div className="flex items-center gap-10 font-bold">
+                <div className="flex items-center gap-5 font-bold">
                     {
                         navLinks.map(({ path, name }) => (
                             <NavLink
