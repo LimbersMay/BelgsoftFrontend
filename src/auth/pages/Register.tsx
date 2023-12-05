@@ -48,7 +48,9 @@ export const Register = () => {
                 })}
             >
                 {
-                    ({}) => (
+                    ({
+                        isSubmitting
+                     }) => (
                         <Form className="flex flex-col gap-5">
                             <Field
                                 type="text"
@@ -82,6 +84,7 @@ export const Register = () => {
                             <button
                                 type="submit"
                                 className="w-96 bg-neutral-700 hover:bg-neutral-600 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:pointer-events-none"
+                                disabled={isSubmitting}
                             >
                                 Register
                             </button>
