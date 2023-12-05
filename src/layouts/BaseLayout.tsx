@@ -1,5 +1,6 @@
 import {NavLink} from "react-router-dom";
 import {ReactElement} from "react";
+import {useAuthStore} from "../hooks/useAuthStore.ts";
 
 interface NavLink {
     name: string,
@@ -12,6 +13,8 @@ interface BaseLayoutProps {
 }
 
 export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
+
+    const { displayName, role } = useAuthStore();
 
     const isActiveLink = ({ isActive}: { isActive: boolean}) => {
 
@@ -49,6 +52,14 @@ export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
                             </NavLink>
                         ))
                     }
+
+                    <NavLink to={"/logout"} className={isActiveLink}>
+                        Logout
+                    </NavLink>
+
+                    <div className="self-center text-xl text-neutral-400">
+                        { displayName } ({ role && role.charAt(0).toUpperCase() + role.slice(1).toLowerCase() })
+                    </div>
                 </div>
             </header>
 
