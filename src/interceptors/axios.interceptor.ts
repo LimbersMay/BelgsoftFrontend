@@ -5,6 +5,14 @@ export const AxiosInterceptor = () => {
     belgsoftApi.interceptors.request.use((request) => {
         request.withCredentials = true;
 
+        // Get token from local storage
+        const token = localStorage.getItem('token');
+
+        // Add token to headers
+        if (token) {
+            request.headers['x-token'] = token;
+        }
+
         return request;
     });
 
@@ -15,7 +23,7 @@ export const AxiosInterceptor = () => {
         (error) => {
 
             if (error.response) {
-                SnackbarUtilities.error(getValidationError(error.response.data.body));
+                SnackbarUtilities.error(getValidationError(error.response.data.error));
             }
 
             if (!error.response) {
