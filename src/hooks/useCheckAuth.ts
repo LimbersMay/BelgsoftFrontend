@@ -28,6 +28,8 @@ export const useCheckAuth = () => {
                     uid: id,
                     displayName: name,
                     email: email,
+                    role: user.role,
+                    userType: user.userType,
                 }));
 
             }).catch(() => {
