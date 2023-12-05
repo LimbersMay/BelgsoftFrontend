@@ -1,4 +1,5 @@
 import {HTMLInputTypeAttribute} from "react";
+import { Field as FormikField } from "formik";
 
 interface FieldProps {
     type: HTMLInputTypeAttribute;
@@ -13,7 +14,12 @@ export const Field = ({ type, name, fieldName }: FieldProps ) => {
     return (
         <div className="flex flex-col gap-2">
             <label htmlFor={name} className="font-bold text-white">{ fieldName ?? firstNameUpperCase }</label>
-            <input type={type} placeholder={ fieldName ?? firstNameUpperCase } name={name} className="w-96 rounded-md p-2"/>
+            <FormikField
+                type={type}
+                name={name}
+                placeholder={fieldName ?? firstNameUpperCase}
+                className="w-96 rounded-md p-2"
+            />
         </div>
     )
 }
