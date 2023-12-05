@@ -1,11 +1,29 @@
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {AuthRouter} from "../auth/routes/AuthRouter.tsx";
+import {useCheckAuth} from "../hooks/useCheckAuth.ts";
+import {authStatusTypes} from "../auth/types";
+import {HomeRouter} from "../belgSoft/routes/homeRouter.tsx";
+import {CheckingAuth} from "../ui/components";
 
 export const AppRouter = () => {
 
+    const status = useCheckAuth();
+
+    if (status === authStatusTypes.checking) {
+        return <CheckingAuth />;
+    }
+
     return (
         <Routes>
-            <Route path="/auth/*" element={<AuthRouter />}/>
+            {
+                status === authStatusTypes.authenticated
+                    ? <Route path="/*" element={<HomeRouter />}/>
+                    : <>
+                        <Route path="/auth/*" element={<AuthRouter />}/>
+                    </>
+            }
+
+            <Route path="/*" element={<Navigate to="/auth/login" />}/>
         </Routes>
     )
 }
