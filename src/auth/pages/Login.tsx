@@ -1,7 +1,8 @@
-import {ErrorMessage, Form, Formik, FormikHelpers} from "formik";
+import {ErrorMessage, Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {AuthLayout} from "../layouts";
 import {Field} from "../../components";
+import {useAuthStore} from "../../hooks/useAuthStore.ts";
 
 interface FormValues {
     email: string;
@@ -15,11 +16,10 @@ const initialValues: FormValues = {
 
 export const Login = () => {
 
-    const onSubmit = (values: FormValues, {setSubmitting}: FormikHelpers<FormValues>) => {
-        setTimeout(() => {
-            console.log(values);
-            setSubmitting(false);
-        }, 4000);
+    const { startLogin } = useAuthStore();
+
+    const onSubmit = async (values: FormValues) => {
+        await startLogin(values.email, values.password);
     }
 
     return (
