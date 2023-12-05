@@ -1,9 +1,14 @@
 import {AppRouter} from "./routes/AppRouter.tsx";
+import {SnackbarProvider} from "notistack";
+import {SnackbarUtilitiesConfigurator} from "./utils";
 
 function App() {
   return (
     <>
-        <AppRouter />
+        <SnackbarProvider>
+            <SnackbarUtilitiesConfigurator />
+            <AppRouter />
+        </SnackbarProvider>
     </>
   )
 }
