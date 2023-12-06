@@ -1,6 +1,5 @@
-import {Route, Routes} from "react-router-dom";
-import {Home} from "../pages/Home.tsx";
-import {Users} from "../pages/Users.tsx";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {Home, Users} from "../pages";
 
 export const AdminRouter = () => {
     return (
@@ -8,7 +7,7 @@ export const AdminRouter = () => {
             <Route path="/" element={<Home />}/>
             <Route path="/users" element={<Users />}/>
 
-            <Route path="/*" element={<h1>404</h1>}/>
+            <Route path="/*" element={<Navigate to="/" />}/>
         </Routes>
     )
 }

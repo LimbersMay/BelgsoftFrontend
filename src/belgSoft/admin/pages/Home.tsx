@@ -1,4 +1,4 @@
-import {AdminLayout} from "../layouts/AdminLayout.tsx";
+import {AdminLayout} from "../layouts";
 import tiaKaua from "../../../assets/tiaKaua.jpeg";
 
 export const Home = () => {
