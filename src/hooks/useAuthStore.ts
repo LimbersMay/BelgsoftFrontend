@@ -63,8 +63,6 @@ export const useAuthStore = () => {
             // Save token in local storage
             localStorage.setItem('token', token);
 
-            console.log(user);
-
             dispatch(login({
                 uid: user.id,
                 displayName: user.name,
