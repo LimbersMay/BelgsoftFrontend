@@ -1,5 +1,6 @@
 import {HTMLInputTypeAttribute} from "react";
 import { Field as FormikField } from "formik";
+import {firstCapitalLetter} from "../helpers/firstCapitalLetter.ts";
 
 interface FieldProps {
     type: HTMLInputTypeAttribute;
@@ -9,15 +10,13 @@ interface FieldProps {
 
 export const Field = ({ type, name, fieldName }: FieldProps ) => {
 
-    const firstNameUpperCase = name.charAt(0).toUpperCase() + name.slice(1);
-
     return (
         <div className="flex flex-col gap-2">
-            <label htmlFor={name} className="font-bold text-white">{ fieldName ?? firstNameUpperCase }</label>
+            <label htmlFor={name} className="font-bold text-white">{ fieldName ?? firstCapitalLetter(name) }</label>
             <FormikField
                 type={type}
                 name={name}
-                placeholder={fieldName ?? firstNameUpperCase}
+                placeholder={fieldName ?? firstCapitalLetter(name)}
                 className="w-96 rounded-md p-2"
             />
         </div>
