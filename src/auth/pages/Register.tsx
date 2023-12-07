@@ -3,6 +3,7 @@ import {ErrorMessage, Form, Formik, FormikHelpers} from "formik";
 import {Field} from "../../components";
 
 import * as Yup from 'yup';
+import {useAuthStore} from "../../hooks";
 
 interface FormValues {
     username: string;
@@ -20,11 +21,16 @@ const initialValues: FormValues = {
 
 export const Register = () => {
 
-    const onSubmit = (values: FormValues, {setSubmitting}: FormikHelpers<FormValues>) => {
-        setTimeout(() => {
-            console.log(values);
-            setSubmitting(false);
-        }, 4000);
+    const { startCreatingUser } = useAuthStore();
+
+    const onSubmit = async (values: FormValues, {setSubmitting}: FormikHelpers<FormValues>) => {
+        await startCreatingUser({
+            name: values.username,
+            email: values.email,
+            password: values.password
+        });
+
+        setSubmitting(false);
     }
 
     return (
@@ -34,7 +40,7 @@ export const Register = () => {
                 onSubmit={onSubmit}
                 validationSchema={Yup.object({
                     username: Yup.string()
-                        .min(6, 'Must be 6 characters or more')
+                        .min(4, 'Must be 4 characters or more')
                         .required('Required'),
                     email: Yup.string()
                         .email('Invalid email address')
