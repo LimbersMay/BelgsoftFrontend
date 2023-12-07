@@ -2,13 +2,13 @@ import {
     onShowUserModal, onHideUserModal,
     selectUi,
     useAppDispatch,
-    useAppSelector, onShowRoleModal, onHideRoleModal
+    useAppSelector, onShowRoleModal, onHideRoleModal, onShowTableModal, onHideTableModal
 } from "../store";
 
 export const useUiStore = () => {
 
     const dispatch = useAppDispatch();
-    const { isShowingUserModal, isShowingRoleModal } = useAppSelector(selectUi);
+    const { isShowingUserModal, isShowingRoleModal, isShowingTableModal } = useAppSelector(selectUi);
 
     const showUserModal = () => {
         dispatch(onShowUserModal());
@@ -16,6 +16,10 @@ export const useUiStore = () => {
 
     const showRoleModal = () => {
         dispatch(onShowRoleModal());
+    }
+
+    const showTableModal = () => {
+        dispatch(onShowTableModal());
     }
 
     const hideUserModal = () => {
@@ -26,15 +30,22 @@ export const useUiStore = () => {
         dispatch(onHideRoleModal());
     }
 
+    const hideTableModal = () => {
+        dispatch(onHideTableModal());
+    }
+
     return {
         // Properties
         isShowingUserModal,
         isShowingRoleModal,
+        isShowingTableModal,
 
         // Methods
         hideUserModal,
         showUserModal,
         hideRoleModal,
-        showRoleModal
+        showRoleModal,
+        showTableModal,
+        hideTableModal,
     }
 }
