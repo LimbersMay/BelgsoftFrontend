@@ -6,7 +6,7 @@ export const UserRow = (user: User) => {
     const { setActiveUser  } = useUsersStore();
     const { showUpdatingUserModal } = useUiStore();
 
-    const { ID, username, email, role, plan, status } = user;
+    const { Id, username, email, role, plan, status } = user;
 
     const handleEdit = () => {
         setActiveUser(user);
@@ -15,7 +15,7 @@ export const UserRow = (user: User) => {
 
     return (
         <tr>
-            <td className="px-4 py-2 border">{ID}</td>
+            <td className="px-4 py-2 border">{Id}</td>
             <td className="px-4 py-2 border">{username}</td>
             <td className="px-4 py-2 border">
                 <a href="mailto:lim@google.com">
