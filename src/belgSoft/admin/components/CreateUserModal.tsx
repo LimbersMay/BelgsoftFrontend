@@ -3,190 +3,191 @@ import {User} from "../interfaces";
 import {useRoleStore, useUiStore, useUsersStore, useUserStateStore} from "../../../hooks";
 import * as Yup from "yup";
 import { getDirtyValues} from "../../../helpers/getDirtyValues.ts";
+import {ModalLayout} from "./UserModal.tsx";
 
-export type CreateUserModalProps = Pick<User, "Id" | "username" | "email" | "roleId" | "planId" | "statusId">
+export interface CreateUserModalProps extends Pick<User, "Id" | "username" | "email" | "roleId" | "planId" | "statusId" | "status" | "role"> {
+    password: string;
+}
 
 export const CreateUserModal = () => {
 
-    const {hideCreatingUserModal, hideUpdatingUserModal, isCreatingUserModalOpen, isUpdatingUserModalOpen} = useUiStore();
+    const { hideUserModal, isShowingUserModal } = useUiStore();
 
     const { roles } = useRoleStore();
     const { userStates } = useUserStateStore();
-    const {activeUser, setActiveUser, startUpdatingUser } = useUsersStore();
+    const {activeUser, setActiveUser, startUpdatingUser, startCreatingUser } = useUsersStore();
 
-    let initialValues: CreateUserModalProps = {
-        Id: activeUser?.Id || "",
-        username: activeUser?.username || "",
-        email: activeUser?.email || "",
-        roleId: activeUser?.roleId || "0",
-        planId: activeUser?.planId || "",
-        statusId: activeUser?.statusId || ""
+    let createUserInitialValues: CreateUserModalProps;
+
+    if (activeUser) {
+        createUserInitialValues = {
+            ...activeUser,
+            password: "",
+        };
+    } else {
+
+        createUserInitialValues = {
+            Id: "0",
+            username: "",
+            email: "",
+            roleId: roles[1]?.id ?? "0",
+            planId: "2",
+            statusId: userStates[0]?.id ?? "0",
+            status: userStates[0]?.name ?? "",
+            role: roles[1]?.name ?? "",
+            password: "default",
+        };
     }
 
     const onClose = () => {
-        hideCreatingUserModal();
-        hideUpdatingUserModal();
+        hideUserModal();
 
         setActiveUser(null);
     }
 
-    const onSubmit = async (values: CreateUserModalProps) => {
+    const onCreateUser = async (values: CreateUserModalProps) => {
+        hideUserModal();
 
-        const difference = getDirtyValues<CreateUserModalProps>(values, initialValues);
-        difference.Id = values.Id;
+        await startCreatingUser(values);
 
-        await startUpdatingUser(difference);
-        onClose();
+        setActiveUser(null);
+    }
+
+    const onEditUser = async (values: Partial<CreateUserModalProps>) => {
+        hideUserModal();
+
+        const dirtyValues = getDirtyValues<CreateUserModalProps>(values, createUserInitialValues);
+        dirtyValues.Id = createUserInitialValues.Id;
+
+        await startUpdatingUser(dirtyValues);
+
+        setActiveUser(null);
     }
 
     return (
         <>
-            {
-                (isCreatingUserModalOpen || isUpdatingUserModalOpen ) && (
-                    <div className="fixed inset-0 flex items-center justify-center">
-                        <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-                        <div className="relative z-50 bg-white p-4 max-w-md mx-auto rounded shadow-lg flex flex-col gap-2">
-                            {
-                                isCreatingUserModalOpen
-                                ? (
-                                    <h2 className="text-2xl font-bold text-green-800">
-                                        <span className="text-neutral-950">Create</span>
-                                        <span className="text-green-800"> User</span>
-                                    </h2>
-                                ) : (
-                                    <h2 className="text-2xl font-bold text-green-800">
-                                         <span className="text-neutral-950">Update</span>
-                                            <span className="text-green-800"> User</span>
-                                    </h2>
-                                )
-                            }
+            <ModalLayout
+                mode={activeUser ? "Update" : "Create"}
+                show={isShowingUserModal}
+                onClose={onClose}
+            >
+                <Formik
+                    initialValues={ createUserInitialValues }
+                    onSubmit={
+                        activeUser
+                            ? onEditUser
+                            : onCreateUser
+                    }
+                    validationSchema={Yup.object({
+                        username: Yup.string()
+                            .required('Required'),
+                        email: Yup.string()
+                            .email('Invalid email address')
+                            .required('Required'),
+                    })}
+                >
+                    {
+                        ({}) => (
+                            <Form className="flex flex-col gap-2">
 
-                            <hr/>
+                                <div className="flex flex-col">
+                                    <label htmlFor="username" className="font-bold text-green-800">Name</label>
+                                    <Field
+                                        type="text"
+                                        name="username"
+                                        placeholder="Name"
+                                        className="w-96 rounded-md p-2 border-2"
+                                    />
+                                </div>
 
-                            <Formik
-                                initialValues={initialValues}
-                                onSubmit={onSubmit}
-                                validationSchema={Yup.object({
-                                    username: Yup.string()
-                                        .required('Required'),
-                                    email: Yup.string()
-                                        .email('Invalid email address')
-                                        .required('Required'),
-                                })}
-                            >
-                                {
-                                    ({}) => (
-                                        <Form className="flex flex-col gap-2">
+                                <ErrorMessage name={"username"} component="h3" className="font-bold text-red-500"/>
 
-                                            <div className="flex flex-col">
-                                                <label htmlFor="username" className="font-bold text-green-800">Name</label>
-                                                <Field
-                                                    type="text"
-                                                    name="username"
-                                                    placeholder="Name"
-                                                    className="w-96 rounded-md p-2 border-2"
-                                                />
-                                            </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="email" className="font-bold text-green-800">Email</label>
+                                    <Field
+                                        type="text"
+                                        name="email"
+                                        placeholder="Email"
+                                        className="w-96 rounded-md p-2 border-2"
+                                    />
+                                </div>
 
-                                            <ErrorMessage name={"username"} component="h3" className="font-bold text-red-500"/>
+                                <ErrorMessage name={"email"} component="h3" className="font-bold text-red-500"/>
 
-                                            <div className="flex flex-col">
-                                                <label htmlFor="email" className="font-bold text-green-800">Email</label>
-                                                <Field
-                                                    type="text"
-                                                    name="email"
-                                                    placeholder="Email"
-                                                    className="w-96 rounded-md p-2 border-2"
-                                                />
-                                            </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="roleId" className="font-bold text-green-800">Role</label>
+                                    <Field
+                                        type="text"
+                                        name="roleId"
+                                        placeholder="Role"
+                                        className="w-96 rounded-md p-2 border-2"
+                                        as="select"
+                                    >
+                                        {roles.map((role) => (
+                                            <option
+                                                key={role.id}
+                                                value={role.id} // Establece el valor del option como el role.id
+                                            >
+                                                {role.name.charAt(0).toUpperCase() + role.name.slice(1).toLowerCase()}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                </div>
 
-                                            <ErrorMessage name={"email"} component="h3" className="font-bold text-red-500"/>
+                                <div className="flex flex-col">
+                                    <label htmlFor="planId" className="font-bold text-green-800">Plan</label>
+                                    <Field
+                                        type="text"
+                                        name="planId"
+                                        placeholder="Plan"
+                                        className="w-96 rounded-md p-2 border-2"
+                                        as="select"
+                                        disabled
+                                    >
+                                        <option value="">Select plan</option>
+                                    </Field>
+                                </div>
 
-                                            <div className="flex flex-col">
-                                                <label htmlFor="roleId" className="font-bold text-green-800">Role</label>
-                                                <Field
-                                                    type="text"
-                                                    name="roleId"
-                                                    placeholder="Role"
-                                                    className="w-96 rounded-md p-2 border-2"
-                                                    as="select"
+                                <div className="flex flex-col">
+                                    <label htmlFor="statusId" className="font-bold text-green-800">Status</label>
+                                    <Field
+                                        type="text"
+                                        name="statusId"
+                                        placeholder="State"
+                                        className="w-96 rounded-md p-2 border-2"
+                                        as="select"
+                                    >
+                                        <option value="">Select status</option>
+                                        {
+                                            userStates.map((userStatus) => (
+                                                <option
+                                                    key={userStatus.id}
+                                                    value={userStatus.id}
                                                 >
-                                                    {roles.map((role) => (
-                                                        <option
-                                                            key={role.id}
-                                                            value={role.id} // Establece el valor del option como el role.id
-                                                        >
-                                                            {role.name.charAt(0).toUpperCase() + role.name.slice(1).toLowerCase()}
-                                                        </option>
-                                                    ))}
-                                                </Field>
-                                            </div>
-
-                                            <div className="flex flex-col">
-                                                <label htmlFor="planId" className="font-bold text-green-800">Plan</label>
-                                                <Field
-                                                    type="text"
-                                                    name="planId"
-                                                    placeholder="Plan"
-                                                    className="w-96 rounded-md p-2 border-2"
-                                                    as="select"
-                                                    disabled
-                                                >
-                                                    <option value="">Select plan</option>
-                                                </Field>
-                                            </div>
-
-                                            <div className="flex flex-col">
-                                                <label htmlFor="stateId" className="font-bold text-green-800">Status</label>
-                                                <Field
-                                                    type="text"
-                                                    name="stateId"
-                                                    placeholder="State"
-                                                    className="w-96 rounded-md p-2 border-2"
-                                                    as="select"
-                                                >
-                                                    <option value="">Select status</option>
                                                     {
-                                                        userStates.map((userState) => (
-                                                            <option
-                                                                key={userState.id}
-                                                                value={userState.id}
-                                                            >
-                                                                {
-                                                                    userState.name.charAt(0).toUpperCase() + userState.name.slice(1).toLowerCase()
-                                                                }
-                                                            </option>
-                                                        ))
+                                                        userStatus.name.charAt(0).toUpperCase() + userStatus.name.slice(1).toLowerCase()
                                                     }
-                                                </Field>
-                                            </div>
+                                                </option>
+                                            ))
+                                        }
+                                    </Field>
+                                </div>
 
-                                            {
-                                                isCreatingUserModalOpen
-                                                ? (
-                                                    <button
-                                                        type="submit"
-                                                        className="px-4 py-2 w-full text-white bg-green-500 rounded hover:bg-green-600"
-                                                    >
-                                                        Create
-                                                    </button>
-                                                ) : (
-                                                    <button
-                                                        type="submit"
-                                                        className="px-4 py-2 w-full text-white bg-green-500 rounded hover:bg-green-600"
-                                                    >
-                                                        Update
-                                                    </button>
-                                                )
-                                            }
-                                        </Form>
-                                    )
-                                }
-                            </Formik>
-                        </div>
-                    </div>
-                )
-            }
+                                <button
+                                    className="px-4 py-2 w-full text-white bg-green-500 rounded hover:bg-green-600"
+                                    type="submit"
+                                >
+                                    {
+                                        activeUser
+                                            ? "Update"
+                                            : "Create"
+                                    }
+                                </button>
+                            </Form>
+                        )
+                    }
+                </Formik>
+            </ModalLayout>
         </>
     );
 };
