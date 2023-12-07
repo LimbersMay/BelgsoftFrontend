@@ -1,18 +1,20 @@
-import {useRoleStore} from "../../../hooks";
+import {useRoleStore, useUiStore} from "../../../hooks";
 import {AdminLayout} from "../layouts";
 import {CrudTable} from "../../components/CrudTable.tsx";
-import {CreateUserModal} from "../components";
 import {RoleRow} from "../components/RoleRow.tsx";
+import {CreateRoleModal} from "../components/CreateRoleModal.tsx";
 
 export const Roles = () => {
+
     const headers = [
         'ID',
         'Name',
-        'State',
+        'Value',
         'Actions'
     ]
 
     const { roles } = useRoleStore();
+    const { showRoleModal } = useUiStore();
 
     return (
         <AdminLayout>
@@ -21,7 +23,7 @@ export const Roles = () => {
                     Roles
                 </h1>
 
-                <button className="px-4 py-2 mt-4 text-white bg-green-500 rounded hover:bg-green-600">
+                <button className="px-4 py-2 mt-4 text-white bg-green-500 rounded hover:bg-green-600" onClick={showRoleModal}>
                     Create Role
                 </button>
 
@@ -34,8 +36,7 @@ export const Roles = () => {
                     }
                 </CrudTable>
 
-
-                <CreateUserModal />
+                <CreateRoleModal />
             </div>
         </AdminLayout>
     )
