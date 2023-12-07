@@ -1,11 +1,11 @@
-import {Table} from "../../interfaces/table.interface.ts";
-import {useUiStore} from "../../../hooks";
-import {useTablesStore} from "../../../hooks/useTablesStore.ts";
+import {Table} from "../interfaces/table.interface.ts";
+import {useUiStore} from "../../hooks";
+import {useTablesStore} from "../../hooks/useTablesStore.ts";
 
 export const TableRow = (table: Table) => {
 
     const { showTableModal } = useUiStore();
-    const { setActiveTable } = useTablesStore();
+    const { setActiveTable, startDeletingTable } = useTablesStore();
 
     const handleEdit = () => {
         showTableModal();
@@ -29,6 +29,7 @@ export const TableRow = (table: Table) => {
                 </button>
                 <button
                     className="px-4 py-2 text-white w-20 bg-red-500 rounded hover:bg-red-600 disabled:bg-red-400"
+                    onClick={() => startDeletingTable(id)}
                 >
                     Delete
                 </button>
