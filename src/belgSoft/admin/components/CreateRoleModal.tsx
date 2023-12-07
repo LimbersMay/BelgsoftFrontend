@@ -1,8 +1,10 @@
-import {ModalLayout} from "./UserModal.tsx";
+import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {useRoleStore, useUiStore} from "../../../hooks";
-import {Form, Formik} from "formik";
+import {ErrorMessage, Form, Formik} from "formik";
 import {Role} from "../interfaces/Role.ts";
 import {ModalField} from "../../components/ModalField.tsx";
+import * as Yup from "yup";
+import {getDirtyValues} from "../../../helpers/getDirtyValues.ts";
 
 const defaultValues: Role = {
     id: "0",
@@ -13,15 +15,33 @@ const defaultValues: Role = {
 export const CreateRoleModal = () => {
 
     const { isShowingRoleModal, hideRoleModal } = useUiStore();
-    const { activeRole , setActiveRole} = useRoleStore();
+    const { activeRole , setActiveRole, startCreatingRole, startUpdatingRole } = useRoleStore();
 
     const handleClose = () => {
         hideRoleModal();
         setActiveRole(null);
     }
 
-    const onSubmit = async (values: Role) => {
-        console.log(values);
+    const onCreateRole = async (values: Role) => {
+        hideRoleModal();
+
+        await startCreatingRole(values);
+
+        setActiveRole(null);
+    }
+
+    const onEditRole = async (values: Partial<Role>) => {
+        hideRoleModal();
+
+        const dirtyValues = getDirtyValues<Role>(values, activeRole);
+
+        if (Object.keys(dirtyValues).length === 0) return;
+
+        dirtyValues.id = `${activeRole?.id}`
+
+        await startUpdatingRole(dirtyValues);
+
+        setActiveRole(null);
     }
 
     return (
@@ -36,15 +56,28 @@ export const CreateRoleModal = () => {
         >
             <Formik
                 initialValues={ activeRole ?? defaultValues }
-                onSubmit={onSubmit}
+                onSubmit={
+                    activeRole
+                        ? onEditRole
+                        : onCreateRole
+                }
+                validationSchema={Yup.object({
+                    roleName: Yup.string()
+                        .required('Role name is required'),
+
+                    value: Yup.string()
+                        .required('Value is required'),
+                })}
             >
                 {
                     ({}) => (
                         <Form className="flex flex-col gap-2">
 
-                            <ModalField name={"roleName"} type={"text"} fieldName={"Role name"} />
+                            <ModalField name="roleName" type="text" fieldName="Role name" />
+                            <ErrorMessage name="roleName" component="div" className="font-bold text-red-500" />
 
-                            <ModalField name={"value"} type={"text"} />
+                            <ModalField name="value" type="text" />
+                            <ErrorMessage name="value" component="div" className="font-bold text-red-500" />
 
                             <button
                                 type="submit"
