@@ -1,13 +1,13 @@
 import {ReactElement} from "react";
 
-interface CreateUserModalProps {
+interface ModalProps {
     children?: ReactElement;
     show: boolean;
     onClose: () => void;
     mode: 'Create' | 'Update';
 }
 
-export const ModalLayout = ({children, mode, show, onClose}: CreateUserModalProps) => {
+export const ModalLayout = ({children, mode, show, onClose}: ModalProps) => {
     return (
         <>
             {
