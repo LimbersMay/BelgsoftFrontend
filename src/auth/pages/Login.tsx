@@ -2,7 +2,7 @@ import {ErrorMessage, Form, Formik} from "formik";
 import * as Yup from 'yup';
 import {AuthLayout} from "../layouts";
 import {Field} from "../../components";
-import {useAuthStore} from "../../hooks/useAuthStore.ts";
+import {useAuthStore} from "../../hooks";
 
 interface FormValues {
     email: string;
