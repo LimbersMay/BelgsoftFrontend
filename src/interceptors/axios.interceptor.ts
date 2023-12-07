@@ -29,6 +29,8 @@ export const AxiosInterceptor = () => {
             if (!error.response) {
                 SnackbarUtilities.error(getValidationError('ERR_NETWORK'));
             }
+
+            console.error(error);
             return Promise.reject(error);
         }
     )
