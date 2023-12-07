@@ -1,6 +1,7 @@
-import {Navigate, Route, Routes} from "react-router-dom";
-import {useAuthStore} from "../../hooks/useAuthStore.ts";
-import {AdminRouter} from "../admin/routes/AdminRouter.tsx";
+import {Route, Routes} from "react-router-dom";
+import {useAuthStore} from "../../hooks";
+import {AdminRouter} from "../admin";
+import {WaiterRouter} from "../waiter";
 
 export const HomeRouter = () => {
 
@@ -12,7 +13,7 @@ export const HomeRouter = () => {
                 role === "ADMIN" ? (
                     <Route path="/*" element={<AdminRouter />} />
                 ) : (
-                    <Navigate to="/login" />
+                    <Route path="/*" element={<WaiterRouter />} />
                 )
             }
         </Routes>
