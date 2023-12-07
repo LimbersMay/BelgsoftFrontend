@@ -4,6 +4,8 @@ import {useRoleStore, useUiStore, useUsersStore, useUserStateStore} from "../../
 import * as Yup from "yup";
 import { getDirtyValues} from "../../../helpers/getDirtyValues.ts";
 import {ModalLayout} from "./UserModal.tsx";
+import {ModalField} from "../../components/ModalField.tsx";
+import {firstCapitalLetter} from "../../../helpers/firstCapitalLetter.ts";
 
 export interface CreateUserModalProps extends Pick<User, "Id" | "username" | "email" | "roleId" | "planId" | "statusId" | "status" | "role"> {
     password: string;
@@ -34,7 +36,7 @@ export const CreateUserModal = () => {
             planId: "2",
             statusId: userStates[0]?.id ?? "0",
             status: userStates[0]?.name ?? "",
-            role: roles[1]?.name ?? "",
+            role: roles[1]?.roleName ?? "",
             password: "default",
         };
     }
@@ -83,34 +85,25 @@ export const CreateUserModal = () => {
                             .required('Required'),
                         email: Yup.string()
                             .email('Invalid email address')
-                            .required('Required'),
+                            .required('Required')
                     })}
                 >
                     {
                         ({}) => (
                             <Form className="flex flex-col gap-2">
 
-                                <div className="flex flex-col">
-                                    <label htmlFor="username" className="font-bold text-green-800">Name</label>
-                                    <Field
-                                        type="text"
-                                        name="username"
-                                        placeholder="Name"
-                                        className="w-96 rounded-md p-2 border-2"
-                                    />
-                                </div>
+                                <ModalField
+                                    name={"username"}
+                                    type={"text"}
+                                />
 
-                                <ErrorMessage name={"username"} component="h3" className="font-bold text-red-500"/>
+                                <ErrorMessage
+                                    name={"username"}
+                                    component="h3"
+                                    className="font-bold text-red-500"
+                                />
 
-                                <div className="flex flex-col">
-                                    <label htmlFor="email" className="font-bold text-green-800">Email</label>
-                                    <Field
-                                        type="text"
-                                        name="email"
-                                        placeholder="Email"
-                                        className="w-96 rounded-md p-2 border-2"
-                                    />
-                                </div>
+                                <ModalField name={"email"} type={"email"} />
 
                                 <ErrorMessage name={"email"} component="h3" className="font-bold text-red-500"/>
 
@@ -128,7 +121,9 @@ export const CreateUserModal = () => {
                                                 key={role.id}
                                                 value={role.id} // Establece el valor del option como el role.id
                                             >
-                                                {role.name.charAt(0).toUpperCase() + role.name.slice(1).toLowerCase()}
+                                                {
+                                                    firstCapitalLetter(role.roleName)
+                                                }
                                             </option>
                                         ))}
                                     </Field>
@@ -172,6 +167,8 @@ export const CreateUserModal = () => {
                                         }
                                     </Field>
                                 </div>
+
+                                <ModalField name="password" type="password" />
 
                                 <button
                                     className="px-4 py-2 w-full text-white bg-green-500 rounded hover:bg-green-600"
