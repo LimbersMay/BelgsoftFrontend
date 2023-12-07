@@ -4,10 +4,12 @@ import {RootState} from "../../../store.ts";
 
 interface RoleState {
     roles: Role[];
+    activeRole: Role | null;
 }
 
 const initialState: RoleState = {
-    roles: []
+    roles: [],
+    activeRole: null
 };
 
 export const roleSlice = createSlice({
@@ -16,11 +18,14 @@ export const roleSlice = createSlice({
     reducers: {
         setRoles: (state, action: PayloadAction<Role[]>) => {
             state.roles = action.payload;
+        },
+        onSetActiveRole: (state, action: PayloadAction<Role | null>) => {
+            state.activeRole = action.payload;
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { setRoles} = roleSlice.actions;
+export const { setRoles, onSetActiveRole} = roleSlice.actions;
 export const selectRole = (state: RootState) => state.role;
