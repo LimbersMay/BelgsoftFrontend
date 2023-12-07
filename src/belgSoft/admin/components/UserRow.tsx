@@ -1,16 +1,16 @@
-import {User} from "../admin";
-import {useUiStore, useUsersStore} from "../../hooks";
+import {User} from "../index.ts";
+import {useUiStore, useUsersStore} from "../../../hooks";
 
 export const UserRow = (user: User) => {
 
     const { setActiveUser  } = useUsersStore();
-    const { showUpdatingUserModal } = useUiStore();
+    const { showUserModal } = useUiStore();
 
     const { Id, username, email, role, plan, status } = user;
 
     const handleEdit = () => {
         setActiveUser(user);
-        showUpdatingUserModal();
+        showUserModal();
     }
 
     return (
@@ -18,16 +18,22 @@ export const UserRow = (user: User) => {
             <td className="px-4 py-2 border">{Id}</td>
             <td className="px-4 py-2 border">{username}</td>
             <td className="px-4 py-2 border">
-                <a href="mailto:lim@google.com">
-                    {email}
-                </a>
+                { email }
             </td>
             <td className="px-4 py-2 border">{role}</td>
             <td className="px-4 py-2 border">{plan}</td>
             <td className="px-4 py-2 border">
-                <span className="px-2 py-1 text-xs text-white bg-green-500 rounded">
-                    {status}
-                </span>
+                {
+                    status === "ACTIVE" ? (
+                        <span className="px-2 py-1 text-xs text-white bg-green-500 rounded">
+                            {status}
+                        </span>
+                    ) : (
+                        <span className="px-2 py-1 text-xs text-white bg-red-500 rounded">
+                            {status}
+                        </span>
+                    )
+                }
             </td>
             <td className="px-4 py-2 border text-left">
                 <button
