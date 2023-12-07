@@ -25,6 +25,7 @@ export const useCheckAuth = () => {
 
                 const { id, name, email } = user;
                 dispatch(login({
+                    branchId: user.branchId,
                     uid: id,
                     displayName: name,
                     email: email,
