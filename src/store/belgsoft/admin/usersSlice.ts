@@ -31,11 +31,20 @@ export const usersSlice = createSlice({
         },
         createUser: (state, { payload }: PayloadAction<User>) => {
             state.users.push(payload);
+        },
+        deleteUser: (state, { payload }: PayloadAction<string>) => {
+            state.users = state.users.filter((user) => user.Id !== payload);
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const {setUsers, onSetActiveUser, updateUser, createUser } = usersSlice.actions;
+export const {
+    setUsers,
+    onSetActiveUser,
+    updateUser,
+    createUser ,
+    deleteUser
+} = usersSlice.actions;
 export const selectUsers = (state: RootState) => state.users;
