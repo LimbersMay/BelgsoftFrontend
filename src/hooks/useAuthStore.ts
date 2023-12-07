@@ -10,7 +10,7 @@ interface CreatingUserProps {
 
 export const useAuthStore = () => {
 
-    const { uid, displayName, role, email, userType } = useAppSelector(selectAuth);
+    const { uid, branchId, displayName, role, email, userType } = useAppSelector(selectAuth);
 
     const dispatch = useAppDispatch();
 
@@ -64,6 +64,7 @@ export const useAuthStore = () => {
             localStorage.setItem('token', token);
 
             dispatch(login({
+                branchId: user.branchId,
                 uid: user.id,
                 displayName: user.name,
                 email: user.email,
@@ -73,7 +74,11 @@ export const useAuthStore = () => {
         } catch (error) {
             dispatch(logout(null));
         }
+    }
 
+    const startLogout = () => {
+        localStorage.removeItem('token');
+        dispatch(logout(null));
     }
 
     return {
@@ -83,9 +88,11 @@ export const useAuthStore = () => {
         role,
         email,
         userType,
+        branchId,
 
         // methods
         startCreatingUser,
-        startLogin
+        startLogin,
+        startLogout
     }
 }
