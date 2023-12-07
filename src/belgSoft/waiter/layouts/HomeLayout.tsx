@@ -1,5 +1,6 @@
 import {BaseLayout} from "../../../layouts";
-import {ReactElement} from "react";
+import {ReactElement, useEffect} from "react";
+import {useTablesStore} from "../../../hooks/useTablesStore.ts";
 
 export const HomeLayout = ({ children }: {children: ReactElement}) => {
 
@@ -13,6 +14,15 @@ export const HomeLayout = ({ children }: {children: ReactElement}) => {
             path: "/areas"
         },
     ]
+
+    const { startLoadingTables } = useTablesStore();
+
+    // load the data
+    useEffect(() => {
+        (async () => {
+            await startLoadingTables();
+        })()
+    }, [])
 
     return (
         <BaseLayout navLinks={navLinks}>
