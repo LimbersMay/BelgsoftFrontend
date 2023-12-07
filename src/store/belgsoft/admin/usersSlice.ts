@@ -1,22 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from "../../store.ts";
-import {User} from "../../../belgSoft/admin";
+import {CreateUserModalProps, User} from "../../../belgSoft/admin";
 
 interface UsersState {
     users: User[];
-    activeUser: User;
+    activeUser: User | null;
 }
 
 const initialState: UsersState = {
     users: [],
-    activeUser: {
-        ID: 0,
-        username: '',
-        email: '',
-        role: '',
-        plan: '',
-        status: ''
-    }
+    activeUser: null
 }
 
 export const usersSlice = createSlice({
@@ -26,13 +19,23 @@ export const usersSlice = createSlice({
         setUsers: (state, { payload }: PayloadAction<User[]>) => {
             state.users = payload;
         },
-        onSetActiveUser: (state, { payload }: PayloadAction<User>) => {
+        onSetActiveUser: (state, { payload }: PayloadAction<User | null>) => {
             state.activeUser = payload;
+        },
+        updateUser: (state, { payload }: PayloadAction<Partial<CreateUserModalProps>>) => {
+            const index = state.users.findIndex((user) => user.Id === payload.Id);
+            state.users[index] = {
+                ...state.users[index],
+                ...payload
+            }
+        },
+        createUser: (state, { payload }: PayloadAction<User>) => {
+            state.users.push(payload);
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const {setUsers, onSetActiveUser} = usersSlice.actions;
+export const {setUsers, onSetActiveUser, updateUser, createUser } = usersSlice.actions;
 export const selectUsers = (state: RootState) => state.users;
