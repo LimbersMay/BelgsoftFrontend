@@ -23,10 +23,11 @@ export const useCheckAuth = () => {
                     return dispatch(logout(null));
                 }
 
-                const { id, name, email } = user;
+                const { userId, name, email } = user;
+
                 dispatch(login({
                     branchId: user.branchId,
-                    uid: id,
+                    uid: userId,
                     displayName: name,
                     email: email,
                     role: user.role,
