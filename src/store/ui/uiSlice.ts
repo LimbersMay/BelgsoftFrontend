@@ -2,35 +2,35 @@ import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from "../store";
 
 export interface uiState {
-    isCreatingUserModalOpen: boolean
-    isUpdatingUserModalOpen: boolean
+    isShowingUserModal: boolean,
+    isShowingRoleModal: boolean,
 }
 
 const initialState: uiState = {
-    isCreatingUserModalOpen: false,
-    isUpdatingUserModalOpen: false
+    isShowingUserModal: false,
+    isShowingRoleModal: false,
 }
 
 export const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        onShowCreatingUserModal: (state) => {
-            state.isCreatingUserModalOpen = true;
+        onShowUserModal: (state) => {
+            state.isShowingUserModal = true;
         },
-        onShowUpdatingUserModal: (state) => {
-            state.isUpdatingUserModalOpen = true;
+        onHideUserModal: (state) => {
+            state.isShowingUserModal = false;
         },
-        onHideCreatingUserModal: (state) => {
-            state.isCreatingUserModalOpen = false;
+        onShowRoleModal: (state) => {
+            state.isShowingRoleModal = true;
         },
-        onHideUpdatingUserModal: (state) => {
-            state.isUpdatingUserModalOpen = false;
+        onHideRoleModal: (state) => {
+            state.isShowingRoleModal = false;
         },
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onShowUpdatingUserModal, onHideUpdatingUserModal, onHideCreatingUserModal, onShowCreatingUserModal } = uiSlice.actions;
+export const { onShowUserModal, onHideUserModal, onShowRoleModal, onHideRoleModal } = uiSlice.actions;
 export const selectUi = (state: RootState) => state.ui;
