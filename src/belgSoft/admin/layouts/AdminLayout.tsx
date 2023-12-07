@@ -1,9 +1,6 @@
 import {BaseLayout} from "../../../layouts";
 import {ReactElement, useEffect} from "react";
-import {useUsersStore} from "../../../hooks/useUsersStore.ts";
-import {useRoleStore} from "../../../hooks/useRoleStore.ts";
-import {useUserStateStore} from "../../../hooks/useUserStateStore.ts";
-
+import {useRoleStore, useUsersStore, useUserStateStore} from "../../../hooks";
 export const AdminLayout = ({ children }: { children: ReactElement }) => {
     const navLinks = [
         {
