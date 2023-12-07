@@ -1,6 +1,6 @@
 
 export interface UserState {
-    id: number;
+    id: string;
     name: string;
     state: string;
     createdAt: Date;
