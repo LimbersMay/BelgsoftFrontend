@@ -4,6 +4,7 @@ import {authStatusTypes} from "../../auth/types";
 
 // Define a type for the slice state
 export interface AuthState {
+    branchId?: string | null;
     status?: string;
     uid: string | null;
     email: string | null;
@@ -14,6 +15,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+    branchId: null,
     status: authStatusTypes.checking,
     uid: null,
     email: null,
@@ -28,6 +30,7 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, { payload }: PayloadAction<AuthState>) => {
+            state.branchId = payload.branchId;
             state.status = authStatusTypes.authenticated;
             state.uid = payload.uid;
             state.email = payload.email;
