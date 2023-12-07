@@ -1,40 +1,40 @@
 import {
-    onHideCreatingUserModal, onHideUpdatingUserModal, onShowCreatingUserModal, onShowUpdatingUserModal,
+    onShowUserModal, onHideUserModal,
     selectUi,
     useAppDispatch,
-    useAppSelector
+    useAppSelector, onShowRoleModal, onHideRoleModal
 } from "../store";
 
 export const useUiStore = () => {
 
     const dispatch = useAppDispatch();
-    const { isCreatingUserModalOpen, isUpdatingUserModalOpen } = useAppSelector(selectUi);
+    const { isShowingUserModal, isShowingRoleModal } = useAppSelector(selectUi);
 
-    const hideCreatingUserModal = () => {
-        dispatch(onHideCreatingUserModal());
+    const showUserModal = () => {
+        dispatch(onShowUserModal());
     }
 
-    const hideUpdatingUserModal = () => {
-        dispatch(onHideUpdatingUserModal());
+    const showRoleModal = () => {
+        dispatch(onShowRoleModal());
     }
 
-    const showCreatingUserModal = () => {
-        dispatch(onShowCreatingUserModal());
+    const hideUserModal = () => {
+        dispatch(onHideUserModal());
     }
 
-    const showUpdatingUserModal = () => {
-        dispatch(onShowUpdatingUserModal());
+    const hideRoleModal = () => {
+        dispatch(onHideRoleModal());
     }
 
     return {
         // Properties
-        isCreatingUserModalOpen,
-        isUpdatingUserModalOpen,
+        isShowingUserModal,
+        isShowingRoleModal,
 
         // Methods
-        hideCreatingUserModal,
-        hideUpdatingUserModal,
-        showCreatingUserModal,
-        showUpdatingUserModal
+        hideUserModal,
+        showUserModal,
+        hideRoleModal,
+        showRoleModal
     }
 }
