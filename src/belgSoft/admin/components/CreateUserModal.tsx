@@ -3,7 +3,7 @@ import {User} from "../interfaces";
 import {useRoleStore, useUiStore, useUsersStore, useUserStateStore} from "../../../hooks";
 import * as Yup from "yup";
 import { getDirtyValues} from "../../../helpers/getDirtyValues.ts";
-import {ModalLayout} from "./UserModal.tsx";
+import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {ModalField} from "../../components/ModalField.tsx";
 import {firstCapitalLetter} from "../../../helpers/firstCapitalLetter.ts";
 
