@@ -1,4 +1,4 @@
-import {createUser, onSetActiveUser, updateUser, useAppDispatch, useAppSelector} from "../store";
+import {createUser, deleteUser, onSetActiveUser, updateUser, useAppDispatch, useAppSelector} from "../store";
 import {belgsoftApi} from "../api";
 import {selectUsers, setUsers} from "../store";
 import {CreateUserModalProps, User} from "../belgSoft/admin";
@@ -11,6 +11,10 @@ export const useUsersStore = () => {
 
     const { users, activeUser } = useAppSelector(selectUsers);
     const { branchId: authenticatedUserBranchId } = useAuthStore();
+
+    const setActiveUser = (user: User | null) => {
+        dispatch(onSetActiveUser(user));
+    }
 
     const startLoadingUsers = async () => {
         const response = await belgsoftApi.get('/users');
@@ -66,8 +70,10 @@ export const useUsersStore = () => {
         }));
     }
 
-    const setActiveUser = (user: User | null) => {
-        dispatch(onSetActiveUser(user));
+    const startDeletingUser = async (userId: string) => {
+        await belgsoftApi.delete(`/users/${userId}`);
+
+        dispatch(deleteUser(userId));
     }
 
     return {
@@ -79,6 +85,7 @@ export const useUsersStore = () => {
         startLoadingUsers,
         startUpdatingUser,
         startCreatingUser,
+        startDeletingUser,
         setActiveUser
     }
 }
