@@ -1,5 +1,7 @@
 import {checkingCredentials, login, logout, selectAuth, useAppDispatch, useAppSelector} from "../store";
 import {belgsoftApi} from "../api";
+import {SnackbarUtilities} from "../utils";
+import {useNavigate} from "react-router-dom";
 
 
 interface CreatingUserProps {
@@ -10,39 +12,23 @@ interface CreatingUserProps {
 
 export const useAuthStore = () => {
 
-    const { uid, branchId, displayName, role, email, userType } = useAppSelector(selectAuth);
+    const {uid, branchId, displayName, role, email, userType} = useAppSelector(selectAuth);
 
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const startCreatingUser = async ({name, email, password}: CreatingUserProps) => {
         dispatch(checkingCredentials());
 
         // Async call to create user
-        try {
-             await belgsoftApi.post('/auth/register', {
-                name,
-                email,
-                password
-             });
+        await belgsoftApi.post('/auth/register', {
+            name,
+            email,
+            password
+        });
 
-             const response = await belgsoftApi.post('/auth/login', {
-                email,
-                password
-             });
-
-             const { id, name: username, email: userEmail, role, userType } = response.data;
-
-             dispatch(login({
-                 uid: id,
-                 displayName: username,
-                 email: userEmail,
-                 role,
-                 userType,
-             }));
-
-        } catch (error) {
-            dispatch(logout(null));
-        }
+        // navigate to login page
+        navigate('/login');
     }
 
     const startLogin = async (email: string, password: string) => {
@@ -58,7 +44,7 @@ export const useAuthStore = () => {
                 }
             });
 
-            const { user, token } = response.data;
+            const {user, token} = response.data;
 
             // Save token in local storage
             localStorage.setItem('token', token);
@@ -71,6 +57,8 @@ export const useAuthStore = () => {
                 role: user.role,
                 userType: user.userType,
             }));
+
+            SnackbarUtilities.success("Logged in successfully");
         } catch (error) {
             dispatch(logout(null));
         }
