@@ -14,7 +14,7 @@ interface BaseLayoutProps {
 
 export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
 
-    const { displayName, role } = useAuthStore();
+    const { displayName, role , startLogout} = useAuthStore();
 
     const isActiveLink = ({ isActive}: { isActive: boolean}) => {
 
@@ -53,12 +53,14 @@ export const BaseLayout = ({ children, navLinks }: BaseLayoutProps ) => {
                         ))
                     }
 
-                    <NavLink to={"/logout"} className={isActiveLink}>
-                        Logout
-                    </NavLink>
+                    <div className="flex flex-row">
+                        <button className="rounded-md p-2 hover:bg-neutral-800 hover:text-neutral-100 text-neutral-400" onClick={startLogout}>
+                            Logout
+                        </button>
 
-                    <div className="self-center text-xl text-neutral-400">
-                        { displayName } ({ role && role.charAt(0).toUpperCase() + role.slice(1).toLowerCase() })
+                        <div className="self-center text-sm text-neutral-400">
+                            { displayName } ({ role && role.charAt(0).toUpperCase() + role.slice(1).toLowerCase() })
+                        </div>
                     </div>
                 </div>
             </header>
