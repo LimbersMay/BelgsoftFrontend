@@ -1,8 +1,7 @@
-import {HomeLayout} from "../layouts/HomeLayout.tsx";
-import {useTablesStore} from "../../../hooks/useTablesStore.ts";
-import {useUiStore} from "../../../hooks";
+import {WaiterLayout} from "../layouts/WaiterLayout.tsx";
+import { useTablesStore, useUiStore } from "../../../hooks";
 import {TableModal} from "../components/TableModal.tsx";
-import {CrudTable, TableRow} from "../../components";
+import {CrudTable, TableRow} from "../../shared";
 
 export const Tables = () => {
 
@@ -17,7 +16,7 @@ export const Tables = () => {
     const { showTableModal } = useUiStore();
 
     return (
-        <HomeLayout>
+        <WaiterLayout>
             <div className="p-10">
                 <h1 className="text-4xl font-bold text-neutral-900">
                     Tables
@@ -38,6 +37,6 @@ export const Tables = () => {
 
                 <TableModal />
             </div>
-        </HomeLayout>
+        </WaiterLayout>
     )
 }
