@@ -1,6 +1,6 @@
 import {useAppDispatch, useAppSelector} from "../store";
 import {
-    createRole,
+    createRole, deleteRole,
     onSetActiveRole,
     selectRole,
     setRoles,
@@ -61,6 +61,11 @@ export const useRoleStore = () => {
         dispatch(updateRole(role));
     }
 
+    const startDeletingRole = async (roleId: string) => {
+        await belgsoftApi.delete(`/role/${roleId}`);
+        dispatch(deleteRole(roleId));
+    }
+
     return {
         // Properties
         roles,
@@ -70,6 +75,7 @@ export const useRoleStore = () => {
         startLoadingRoles,
         startCreatingRole,
         startUpdatingRole,
+        startDeletingRole,
         setActiveRole,
     }
 }
