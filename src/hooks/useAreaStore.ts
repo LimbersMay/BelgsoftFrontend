@@ -1,6 +1,7 @@
-import {useAppDispatch, useAppSelector} from "../store";
-import {onSetActiveArea, selectArea, setAreas, updateArea} from "../store/belgsoft/admin/areasSlice.ts";
+import {deleteArea, setArea, useAppDispatch, useAppSelector} from "../store";
+import {onSetActiveArea, selectArea, setAreas, updateArea} from "../store";
 import {belgsoftApi} from "../api";
+import {Area} from "../belgSoft/admin";
 
 export const useAreaStore = () => {
 
@@ -17,8 +18,10 @@ export const useAreaStore = () => {
         dispatch(setAreas(response.data));
     }
 
-    const startCreatingArea = async (area: Partial<Area>) => {
-        console.log(area)
+    const startCreatingArea = async (area: Area) => {
+        const response = await belgsoftApi.post('/areas', {...area});
+
+        dispatch(setArea(response.data));
     }
 
     const startUpdatingArea = async (area: Partial<Area>) => {
@@ -28,7 +31,9 @@ export const useAreaStore = () => {
     }
 
     const startDeletingArea = async (areaId: string) => {
-        console.log(areaId);
+        await belgsoftApi.delete(`/areas/${areaId}`);
+
+        dispatch(deleteArea(areaId));
     }
 
     return {
