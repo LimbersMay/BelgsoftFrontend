@@ -32,11 +32,20 @@ export const roleSlice = createSlice({
                 ...state.roles[roleIndex],
                 ...action.payload
             }
+        },
+        deleteRole: (state, action: PayloadAction<string>) => {
+            state.roles = state.roles.filter(role => role.id !== action.payload);
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { setRoles, onSetActiveRole, createRole, updateRole} = roleSlice.actions;
+export const {
+    setRoles,
+    onSetActiveRole,
+    createRole,
+    updateRole,
+    deleteRole
+} = roleSlice.actions;
 export const selectRole = (state: RootState) => state.role;
