@@ -1,9 +1,9 @@
 import {BaseLayout} from "../../../layouts";
 import {ReactElement, useEffect} from "react";
-import {useTablesStore} from "../../../hooks/useTablesStore.ts";
-import {useAreaStore} from "../../../hooks/useAreaStore.ts";
+import {useAreaStore, useTablesStore} from "../../../hooks";
 
-export const HomeLayout = ({ children }: {children: ReactElement}) => {
+
+export const WaiterLayout = ({ children }: {children: ReactElement}) => {
 
     const navLinks = [
         {
@@ -13,6 +13,10 @@ export const HomeLayout = ({ children }: {children: ReactElement}) => {
         {
             name: "Areas",
             path: "/areas"
+        },
+        {
+            name: "Menus",
+            path: "/menus"
         },
     ]
 
