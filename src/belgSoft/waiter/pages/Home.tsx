@@ -1,9 +1,9 @@
-import {HomeLayout} from "../layouts/HomeLayout.tsx";
+import {WaiterLayout} from "../layouts/WaiterLayout.tsx";
 import tiaKaua from "../../../assets/tiaKaua.jpeg";
 
 export const Home = () => {
     return (
-        <HomeLayout>
+        <WaiterLayout>
             <div className="flex p-10 flex-col items-center justify-center">
 
                 <img src={tiaKaua} alt="tiaKaua" className="w-96"/>
@@ -12,6 +12,6 @@ export const Home = () => {
                     Sistema de administración de la tia de kaua
                 </h1>
             </div>
-        </HomeLayout>
+        </WaiterLayout>
     )
 }
