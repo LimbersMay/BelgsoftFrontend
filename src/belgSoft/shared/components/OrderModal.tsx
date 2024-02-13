@@ -1,36 +1,60 @@
 import {Form, Formik} from "formik";
 import * as Yup from "yup";
 import {ModalField, ModalSelect} from "./"
-import {useAreaStore, useTablesStore, useUiStore} from "../../../hooks";
-import {Order} from "../../admin";
+import {useAreaStore, useOrderStore, useTablesStore, useUiStore} from "../../../hooks";
+import {Menu, Order} from "../../admin";
 import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {OrderDetailsModal} from "./OrderDetailsModal.tsx";
 
-const initialValues: Order = {
-    orderId: "",
-    customerName: "",
-    area: "",
-    tableNumber: 0,
-    orderStatus: "",
-    quantity: 0,
-    price: 0,
-    tableId: "",
-    menus: []
+interface OrderModalProps extends Omit<Order, "area" | "tableNumber" | "orderStatus" | "orderId"> {
 }
+
+
 
 export const OrderModal = () => {
 
     const { areas } = useAreaStore();
     const { tables } = useTablesStore();
+    const { startCreatingOrder } = useOrderStore();
     const { isShowingOrderModal, hideOrderModal, showOrderDetailModalToEdit, showOrderDetailModalToAdd } = useUiStore();
+
+    const initialValues: OrderModalProps = {
+        userName: "",
+        areaId: areas[0]?.areaId ?? "",
+        customerName: "",
+        quantity: 0,
+        price: 0,
+        tableId: tables[0]?.id ?? "",
+        menuItems: []
+    }
 
     const handleClose = () => {
         hideOrderModal();
     }
 
-    const onCreateRecord = async (values: Order) => {
-        console.log(values)
+    const onCreateRecord = async (values: OrderModalProps) => {
+
+        const area = areas.find(area => area.areaId === values.areaId)?.name;
+        const table = tables.find(table => table.id === values.tableId)?.number;
+
+        const dataToPrint = {
+            areaTitle: area,
+            tableTitle: table,
+            productsInOrder: values.menuItems.map( menu => ({productName: menu.name, quantity: menu.quantity})),
+            customerName: values.customerName
+        }
+
+        await startCreatingOrder(values, dataToPrint);
+
         hideOrderModal();
+    }
+
+    const calculateOrderQuantity = (menuItems: Menu[]) => {
+        return menuItems.reduce((acc, menu) => acc + menu.quantity, 0);
+    }
+
+    const calculateOrderPrice = (menuItems: Menu[]) => {
+        return menuItems.reduce((acc, menu) => acc + (menu.price * menu.quantity), 0);
     }
 
     return (
@@ -43,11 +67,12 @@ export const OrderModal = () => {
                 initialValues={ initialValues }
                 onSubmit={onCreateRecord}
                 validationSchema={Yup.object({
-
                 })}
             >
                 {
-                    ({}) => (
+                    ({
+                        values
+                     }) => (
                         <Form className="flex flex-col gap-2">
 
                             <ModalField
@@ -76,25 +101,30 @@ export const OrderModal = () => {
                                 >
                                     View products
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                                     </svg>
+
                                 </button>
                             </div>
 
                             <ModalSelect
-                                name="area"
+                                name="areaId"
+                                fieldName={"Area"}
                                 options={areas.map(area => ({ value: area.areaId, label: area.name }))}
                             />
 
                             <ModalSelect
-                                name="table"
+                                name="tableId"
+                                fieldName={"Table"}
                                 options={tables.map(table => ({ value: table.id, label: table.number }))}
                             />
 
                             <ModalField
                                 name="quantity"
                                 type="number"
+                                disabled
+                                value={values.menuItems ? calculateOrderQuantity(values.menuItems) : 0}
                             />
 
                             <ModalField
@@ -102,6 +132,7 @@ export const OrderModal = () => {
                                 type="number"
                                 fieldName={"Total price"}
                                 disabled
+                                value={values.menuItems ? calculateOrderPrice(values.menuItems) : 0}
                             />
 
                             <button
@@ -110,12 +141,12 @@ export const OrderModal = () => {
                             >
                                 Create
                             </button>
+
+                            <OrderDetailsModal productsToView={ values.menuItems }/>
                         </Form>
                     )
                 }
             </Formik>
-
-            <OrderDetailsModal />
         </ModalLayout>
     )
 }
