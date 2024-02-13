@@ -1,6 +1,6 @@
 import {Navigate, Route, Routes} from "react-router-dom";
 import {AuthRouter} from "../auth/routes/AuthRouter.tsx";
-import {useCheckAuth} from "../hooks/useCheckAuth.ts";
+import {useCheckAuth} from "../hooks";
 import {authStatusTypes} from "../auth/types";
 import {HomeRouter} from "../belgSoft/routes/homeRouter.tsx";
 import {CheckingAuth} from "../ui/components";

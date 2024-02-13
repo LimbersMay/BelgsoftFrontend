@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from "../../store.ts";
+import {Area} from "../../../belgSoft/admin";
 
 interface initialState {
     areas: Area[];

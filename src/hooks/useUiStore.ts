@@ -1,60 +1,89 @@
 import {
-    onShowUserModal,
-    onHideUserModal,
     selectUi,
     useAppDispatch,
     useAppSelector,
-    onShowRoleModal,
-    onHideRoleModal,
-    onShowTableModal,
-    onHideTableModal,
-    onShowAreaModal,
-    onHideAreaModal, onShowMenuModal, onHideMenuModal
+    onSetIsShowingUserModal,
+    onSetIsShowingRoleModal,
+    onSetIsShowingTableModal,
+    onSetIsShowingAreaModal,
+    onSetIsShowingMenuModal,
+    onSetIsShowingOrderModal,
+    onSetIsShowingOrderDetailModalToEdit, onSetIsShowingOrderDetailModalToAdd
 } from "../store";
 
 export const useUiStore = () => {
 
     const dispatch = useAppDispatch();
-    const { isShowingUserModal, isShowingRoleModal, isShowingTableModal, isShowingAreaModal, isShowingMenuModal } = useAppSelector(selectUi);
+    const {
+        isShowingUserModal,
+        isShowingRoleModal,
+        isShowingTableModal,
+        isShowingAreaModal,
+        isShowingMenuModal ,
+        isShowingOrderModal,
+        isShowingOrderDetailModalToEdit,
+        isShowingOrderDetailModalToAdd
+    } = useAppSelector(selectUi);
 
     const showUserModal = () => {
-        dispatch(onShowUserModal());
+        dispatch(onSetIsShowingUserModal(true));
     }
 
     const showRoleModal = () => {
-        dispatch(onShowRoleModal());
+        dispatch(onSetIsShowingRoleModal(true));
     }
 
     const showTableModal = () => {
-        dispatch(onShowTableModal());
+        dispatch(onSetIsShowingTableModal(true));
     }
 
     const showAreaModal = () => {
-        dispatch(onShowAreaModal())
+        dispatch(onSetIsShowingAreaModal(true));
     }
 
     const showMenuModal = () => {
-        dispatch(onShowMenuModal());
+        dispatch(onSetIsShowingMenuModal(true));
+    }
+
+    const showOrderModal = () => {
+        dispatch(onSetIsShowingOrderModal(true));
+    }
+
+    const showOrderDetailModalToEdit = () => {
+        dispatch(onSetIsShowingOrderDetailModalToEdit(true));
+    }
+
+    const showOrderDetailModalToAdd = () => {
+        dispatch(onSetIsShowingOrderDetailModalToAdd(true));
     }
 
     const hideUserModal = () => {
-        dispatch(onHideUserModal());
+        dispatch(onSetIsShowingUserModal(false));
     }
 
     const hideRoleModal = () => {
-        dispatch(onHideRoleModal());
+        dispatch(onSetIsShowingRoleModal(false));
     }
 
     const hideTableModal = () => {
-        dispatch(onHideTableModal());
+        dispatch(onSetIsShowingTableModal(false));
     }
 
     const hideAreaModal = () => {
-        dispatch(onHideAreaModal())
+        dispatch(onSetIsShowingAreaModal(false));
     }
 
     const hideMenuModal = () => {
-        dispatch(onHideMenuModal());
+        dispatch(onSetIsShowingMenuModal(false));
+    }
+
+    const hideOrderModal = () => {
+        dispatch(onSetIsShowingOrderModal(false));
+    }
+
+    const hideOrderDetailModal = () => {
+        dispatch(onSetIsShowingOrderDetailModalToAdd(false));
+        dispatch(onSetIsShowingOrderDetailModalToEdit(false));
     }
 
     return {
@@ -64,6 +93,9 @@ export const useUiStore = () => {
         isShowingTableModal,
         isShowingAreaModal,
         isShowingMenuModal,
+        isShowingOrderModal,
+        isShowingOrderDetailModalToEdit,
+        isShowingOrderDetailModalToAdd,
 
         // Methods
         hideUserModal,
@@ -76,5 +108,10 @@ export const useUiStore = () => {
         hideAreaModal,
         showMenuModal,
         hideMenuModal,
+        showOrderModal,
+        hideOrderModal,
+        showOrderDetailModalToAdd,
+        showOrderDetailModalToEdit,
+        hideOrderDetailModal,
     }
 }

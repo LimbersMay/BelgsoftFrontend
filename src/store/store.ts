@@ -2,8 +2,10 @@ import {configureStore} from "@reduxjs/toolkit";
 import {authSlice, usersSlice, uiSlice} from "./";
 import {roleSlice} from "./belgsoft/admin/authorization/RoleSlice.ts";
 import {userStateSlice} from "./belgsoft/admin/authorization/UserStateSlice.ts";
-import {tablesSlice} from "./belgsoft/admin/tablesSlice.ts";
-import {areasSlice} from "./belgsoft/admin/areasSlice.ts";
+import {tablesSlice} from "./belgsoft";
+import {areasSlice} from "./belgsoft";
+import {menuSlice} from "./belgsoft/admin/menuSlice.ts";
+import {orderSlice} from "./belgsoft/admin/ordersSlice.ts";
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +15,9 @@ export const store = configureStore({
         role: roleSlice.reducer,
         userState: userStateSlice.reducer,
         products: tablesSlice.reducer,
-        area: areasSlice.reducer
+        area: areasSlice.reducer,
+        menu: menuSlice.reducer,
+        order: orderSlice.reducer
     }
 })
 

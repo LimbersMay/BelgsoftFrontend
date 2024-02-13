@@ -1,6 +1,5 @@
-import {Table} from "../interfaces/table.interface.ts";
-import {useUiStore} from "../../hooks";
-import {useTablesStore} from "../../hooks/useTablesStore.ts";
+import {Table} from "../../interfaces/table.interface.ts";
+import {useUiStore, useTablesStore} from "../../../hooks";
 
 export const TableRow = (table: Table) => {
 

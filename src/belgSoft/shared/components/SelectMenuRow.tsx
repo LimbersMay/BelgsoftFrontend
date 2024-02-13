@@ -1,15 +1,70 @@
 import {useUiStore} from "../../../hooks";
-import {Menu} from "../../admin";
+import {Menu, Order} from "../../admin";
 import {useState} from "react";
+import {useFormikContext} from "formik";
 
 export const SelectMenuRow = (menu: Menu) => {
-    const {hideOrderDetailModal} = useUiStore();
 
     const [quantity, setQuantity] = useState(0);
+    const { setFieldValue, values } = useFormikContext<Order>();
     const { isShowingOrderDetailModalToAdd } = useUiStore();
 
-    const handleAdd = () => {
-        hideOrderDetailModal();
+    const calculateOrderQuantity = (menus: Menu[]) => {
+        return menus.reduce((acc, menu) => acc + menu.quantity, 0);
+    }
+
+    const calculateOrderPrice = (menus: Menu[]) => {
+        return menus.reduce((acc, menu) => acc + (menu.price * menu.quantity), 0);
+    }
+
+    const handleAdd = async () => {
+        // Create a new menu item with the quantity
+        const newMenu = {
+            ...menu,
+            quantity
+        }
+
+        // Get the current menus from the formik context
+        const currentMenus = values.menuItems || [];
+
+        // Find if the menu already exists in the current menus and update the quantity
+        const index = currentMenus.findIndex((currentMenu) => currentMenu.menuId === menu.menuId);
+        if (index !== -1) {
+            currentMenus[index].quantity += quantity;
+        } else {
+            // Add the new menu to the current menus
+            currentMenus.push(newMenu);
+        }
+
+        // Set the new menus
+        await setFieldValue("menuItems", currentMenus);
+
+        // Calculate the order quantity and price
+        const orderQuantity = calculateOrderQuantity(currentMenus);
+        const orderPrice = calculateOrderPrice(currentMenus);
+
+        // Set the order quantity and price
+        await setFieldValue("quantity", orderQuantity);
+        await setFieldValue("price", orderPrice);
+    }
+
+    const handleDelete = async () => {
+        // Get the current menus from the formik context
+        const currentMenus = values.menuItems || [];
+
+        // Filter the current menus to remove the selected menu
+        const filteredMenus = currentMenus.filter((currentMenu) => currentMenu.menuId !== menu.menuId);
+
+        // Set the new menus
+        await setFieldValue("menuItems", filteredMenus);
+
+        // Calculate the order quantity and price
+        const orderQuantity = calculateOrderQuantity(filteredMenus);
+        const orderPrice = calculateOrderPrice(filteredMenus);
+
+        // Set the order quantity and price
+        await setFieldValue("quantity", orderQuantity);
+        await setFieldValue("price", orderPrice);
     }
 
     const {name, description, price, isAvailable} = menu;
@@ -27,7 +82,7 @@ export const SelectMenuRow = (menu: Menu) => {
                     placeholder="Quantity"
                     name={ name }
                     onChange={(e) => setQuantity(Number(e.target.value))}
-                    value={quantity}
+                    value={menu.quantity}
                     disabled={!isAvailable}
                 />
             </td>
@@ -38,6 +93,7 @@ export const SelectMenuRow = (menu: Menu) => {
                         <button
                             className="px-4 py-2 mr-2 w-20 text-white bg-gray-500 rounded hover:bg-gray-600 disabled:bg-gray-400"
                             onClick={handleAdd}
+                            type={"button"}
                             disabled={!isAvailable}
                         >
                             Add
@@ -46,7 +102,8 @@ export const SelectMenuRow = (menu: Menu) => {
                         : (
                             <button
                                 className="px-4 py-2 text-white w-20 bg-red-500 rounded hover:bg-red-600 disabled:bg-red-400"
-                                onClick={() => console.log("delete")}
+                                onClick={handleDelete}
+                                type={"button"}
                             >
                                 Delete
                             </button>

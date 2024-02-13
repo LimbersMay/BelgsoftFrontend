@@ -2,6 +2,7 @@ export * from './useAreaStore';
 export * from './useAuthStore';
 export * from './useCheckAuth';
 export * from './useMenuStore';
+export * from './useOrderStore';
 export * from './useRoleStore';
 export * from './useTablesStore';
 export * from './useUiStore';

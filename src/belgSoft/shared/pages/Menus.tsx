@@ -1,8 +1,6 @@
+import {RBACTypes} from "../../admin";
 import {useAuthStore, useMenuStore, useUiStore} from "../../../hooks";
-import {CrudTable} from "../components";
-import {RBACTypes} from "../../admin/types/RBAC-types.ts";
-import {MenuRow} from "../components/MenuRow.tsx";
-import {MenuModal} from "../components/MenuModal.tsx";
+import {MenuRow, MenuModal, CrudTable} from "../components";
 
 
 export const Menus = () => {

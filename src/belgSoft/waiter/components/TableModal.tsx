@@ -3,10 +3,10 @@ import {useUiStore} from "../../../hooks";
 import {useTablesStore} from "../../../hooks/useTablesStore.ts";
 import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {ErrorMessage, Form, Formik} from "formik";
-import {ModalField} from "../../components";
 import * as Yup from "yup";
 import {getDirtyValues} from "../../../helpers/getDirtyValues.ts";
 import {SnackbarUtilities} from "../../../utils";
+import {ModalField} from "../../shared";
 
 const defaultValues: Table = {
     id: "0",

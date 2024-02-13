@@ -1,6 +1,7 @@
 import {BaseLayout} from "../../../layouts";
 import {ReactElement, useEffect} from "react";
-import {useAreaStore, useTablesStore} from "../../../hooks";
+import {useAreaStore, useMenuStore, useTablesStore} from "../../../hooks";
+import {useOrderStore} from "../../../hooks/useOrderStore.ts";
 
 
 export const WaiterLayout = ({ children }: {children: ReactElement}) => {
@@ -18,10 +19,16 @@ export const WaiterLayout = ({ children }: {children: ReactElement}) => {
             name: "Menus",
             path: "/menus"
         },
+        {
+            name: "Orders",
+            path: "/orders"
+        },
     ]
 
     const { startLoadingTables } = useTablesStore();
     const { startLoadingAreas } = useAreaStore();
+    const { startLoadingMenus } = useMenuStore();
+    const { startLoadingOrders } = useOrderStore();
 
 
     // load the data
@@ -29,6 +36,8 @@ export const WaiterLayout = ({ children }: {children: ReactElement}) => {
         (async () => {
             await startLoadingTables();
             await startLoadingAreas();
+            await startLoadingMenus();
+            await startLoadingOrders();
         })()
     }, [])
 
