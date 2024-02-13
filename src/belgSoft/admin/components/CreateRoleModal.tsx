@@ -2,9 +2,9 @@ import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {useRoleStore, useUiStore} from "../../../hooks";
 import {ErrorMessage, Form, Formik} from "formik";
 import {Role} from "../interfaces/Role.ts";
-import {ModalField} from "../../components/ModalField.tsx";
 import * as Yup from "yup";
 import {getDirtyValues} from "../../../helpers/getDirtyValues.ts";
+import {ModalField} from "../../shared";
 
 const defaultValues: Role = {
     id: "0",
