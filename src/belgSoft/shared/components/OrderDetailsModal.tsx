@@ -2,8 +2,13 @@ import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {useMenuStore, useUiStore} from "../../../hooks";
 import {CrudTable} from "./CrudTable.tsx";
 import {SelectMenuRow} from "./SelectMenuRow.tsx";
+import {Menu} from "../../admin";
 
-export const OrderDetailsModal = () => {
+interface OrderDetailsModalProps {
+    productsToView: Menu[];
+}
+
+export const OrderDetailsModal = ({ productsToView }: OrderDetailsModalProps) => {
 
     const {isShowingOrderDetailModalToAdd, isShowingOrderDetailModalToEdit, hideOrderDetailModal} = useUiStore();
     const {menus} = useMenuStore();
@@ -36,17 +41,17 @@ export const OrderDetailsModal = () => {
                 {/* Table */}
                 <CrudTable headers={headers}>
                     {
-                        menus.map((menu) => (
-                            <SelectMenuRow key={menu.menuId} {...menu} />
-                        ))
+                        isShowingOrderDetailModalToAdd ? (
+                            menus.map((menu) => (
+                                <SelectMenuRow key={menu.menuId} {...menu} />
+                            ))
+                        ) : (
+                            productsToView.map((product) => (
+                                <SelectMenuRow key={product.menuId} {...product} />
+                            ))
+                        )
                     }
                 </CrudTable>
-
-                <div className="flex justify-end ">
-                    <button className="px-4 py-2 mt-4 w-28 text-white bg-green-500 rounded hover:bg-green-600">
-                        Save
-                    </button>
-                </div>
             </div>
         </ModalLayout>
     )
