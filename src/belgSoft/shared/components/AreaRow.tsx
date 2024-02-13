@@ -1,6 +1,7 @@
-import {useAuthStore, useUiStore} from "../../hooks";
-import {useAreaStore} from "../../hooks/useAreaStore.ts";
-import {RBACTypes} from "../admin/types/RBAC-types.ts";
+import {useAuthStore, useUiStore} from "../../../hooks";
+import {useAreaStore} from "../../../hooks";
+import {RBACTypes} from "../../admin/types/RBAC-types.ts";
+import {Area} from "../../admin";
 
 export const AreaRow = (area: Area) => {
     const { showAreaModal } = useUiStore();
