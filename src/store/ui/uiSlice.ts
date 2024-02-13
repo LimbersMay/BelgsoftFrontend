@@ -1,51 +1,70 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from "../store";
 
 export interface uiState {
-    isShowingUserModal: boolean,
-    isShowingRoleModal: boolean,
-    isShowingTableModal: boolean,
+    isShowingUserModal: boolean;
+    isShowingRoleModal: boolean;
+    isShowingTableModal: boolean;
+    isShowingAreaModal: boolean;
+    isShowingMenuModal: boolean;
+    isShowingOrderModal: boolean;
+    isShowingOrderDetailModalToAdd: boolean;
+    isShowingOrderDetailModalToEdit: boolean;
 }
 
 const initialState: uiState = {
     isShowingUserModal: false,
     isShowingRoleModal: false,
     isShowingTableModal: false,
+    isShowingAreaModal: false,
+    isShowingMenuModal: false,
+    isShowingOrderModal: false,
+    isShowingOrderDetailModalToAdd: false,
+    isShowingOrderDetailModalToEdit: false,
 }
 
 export const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        onShowUserModal: (state) => {
-            state.isShowingUserModal = true;
+        onSetIsShowingUserModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingUserModal = action.payload;
+
         },
-        onHideUserModal: (state) => {
-            state.isShowingUserModal = false;
+        onSetIsShowingRoleModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingRoleModal = action.payload;
         },
-        onShowRoleModal: (state) => {
-            state.isShowingRoleModal = true;
+        onSetIsShowingTableModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingTableModal = action.payload;
         },
-        onHideRoleModal: (state) => {
-            state.isShowingRoleModal = false;
+        onSetIsShowingAreaModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingAreaModal = action.payload;
         },
-        onShowTableModal: (state) => {
-            state.isShowingTableModal = true;
+        onSetIsShowingMenuModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingMenuModal = action.payload;
         },
-        onHideTableModal: (state) => {
-            state.isShowingTableModal = false;
+        onSetIsShowingOrderModal: (state, action: PayloadAction<boolean>) => {
+            state.isShowingOrderModal = action.payload;
         },
+        onSetIsShowingOrderDetailModalToEdit: (state, action: PayloadAction<boolean>) => {
+            state.isShowingOrderDetailModalToEdit = action.payload;
+        },
+        onSetIsShowingOrderDetailModalToAdd: (state, action: PayloadAction<boolean>) => {
+            state.isShowingOrderDetailModalToAdd = action.payload;
+        }
     }
 });
 
 
 // Action creators are generated for each case reducer function
 export const {
-    onShowUserModal,
-    onHideUserModal,
-    onShowRoleModal,
-    onHideRoleModal ,
-    onShowTableModal,
-    onHideTableModal
+    onSetIsShowingUserModal,
+    onSetIsShowingRoleModal,
+    onSetIsShowingTableModal,
+    onSetIsShowingAreaModal,
+    onSetIsShowingMenuModal,
+    onSetIsShowingOrderModal,
+    onSetIsShowingOrderDetailModalToEdit,
+    onSetIsShowingOrderDetailModalToAdd
 } = uiSlice.actions;
 export const selectUi = (state: RootState) => state.ui;
