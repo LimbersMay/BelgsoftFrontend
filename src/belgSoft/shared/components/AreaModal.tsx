@@ -1,10 +1,11 @@
 import {ModalLayout} from "../../layouts/ModalLayout.tsx";
 import {ErrorMessage, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {ModalField} from "../../components";
-import {useAreaStore} from "../../../hooks/useAreaStore.ts";
+import {useAreaStore} from "../../../hooks";
 import {useUiStore} from "../../../hooks";
 import {getDirtyValues} from "../../../helpers/getDirtyValues.ts";
+import {ModalField} from "./ModalField.tsx";
+import {Area} from "../../admin";
 
 const initialValues: Area = {
     name: "",
@@ -14,7 +15,7 @@ const initialValues: Area = {
 
 export const AreaModal = () => {
 
-    const { activeArea, startUpdatingArea, setActiveArea } = useAreaStore();
+    const { activeArea, startUpdatingArea, setActiveArea, startCreatingArea } = useAreaStore();
     const { isShowingAreaModal, hideAreaModal } = useUiStore();
 
     const handleClose = () => {
@@ -24,7 +25,7 @@ export const AreaModal = () => {
 
     const onEditArea = async (values: Partial<Area>) => {
 
-        const dirtyValues = getDirtyValues<Area>(activeArea, values);
+        const dirtyValues = getDirtyValues<Area>(values, activeArea);
 
         if (Object.keys(dirtyValues).length === 0) return;
 
@@ -36,9 +37,12 @@ export const AreaModal = () => {
         hideAreaModal();
     }
 
-    const onCreateArea = (values: Area) => {
-        console.log(values);
+    const onCreateArea = async (values: Area) => {
+        await startCreatingArea(values);
+        hideAreaModal();
     }
+
+    console.log(activeArea)
 
     return (
         <ModalLayout
@@ -58,11 +62,8 @@ export const AreaModal = () => {
                         : onCreateArea
                 }
                 validationSchema={Yup.object({
-                    roleName: Yup.string()
-                        .required('Role name is required'),
-
-                    value: Yup.string()
-                        .required('Value is required'),
+                    name: Yup.string().required("Name is required"),
+                    description: Yup.string().required("Description is required")
                 })}
             >
                 {
