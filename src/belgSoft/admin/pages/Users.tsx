@@ -1,5 +1,5 @@
 import {AdminLayout} from "../layouts";
-import {CrudTable} from "../../components/CrudTable.tsx";
+import {CrudTable} from "../../shared/components/CrudTable.tsx";
 import {UserRow} from "../components/UserRow.tsx";
 import {CreateUserModal} from "../components";
 import {useUiStore, useUsersStore} from "../../../hooks";
