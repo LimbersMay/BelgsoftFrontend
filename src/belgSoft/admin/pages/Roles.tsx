@@ -1,8 +1,8 @@
 import {useRoleStore, useUiStore} from "../../../hooks";
 import {AdminLayout} from "../layouts";
-import {CrudTable} from "../../components/CrudTable.tsx";
-import {RoleRow} from "../components/RoleRow.tsx";
-import {CreateRoleModal} from "../components/CreateRoleModal.tsx";
+import {CrudTable} from "../../shared";
+import {RoleRow} from "../components";
+import {CreateRoleModal} from "../components";
 
 export const Roles = () => {
 
