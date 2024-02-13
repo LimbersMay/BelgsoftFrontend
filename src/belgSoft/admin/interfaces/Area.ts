@@ -1,5 +1,6 @@
 
-interface Areas {
-    id: string,
-    name: string,
+export interface Area {
+    areaId: string;
+    name: string;
+    description: string;
 }
