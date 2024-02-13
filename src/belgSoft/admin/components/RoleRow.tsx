@@ -5,7 +5,7 @@ import {RBACTypes} from "../types/RBAC-types.ts";
 export const RoleRow = (role: Role) => {
 
     const { showRoleModal } = useUiStore();
-    const { setActiveRole } = useRoleStore();
+    const { setActiveRole, startDeletingRole } = useRoleStore();
 
     const handleEdit = () => {
         showRoleModal();
@@ -31,6 +31,7 @@ export const RoleRow = (role: Role) => {
                 <button
                     className="px-4 py-2 text-white w-20 bg-red-500 rounded hover:bg-red-600 disabled:bg-red-400"
                     disabled={roleName === RBACTypes.ADMIN}
+                    onClick={() => startDeletingRole(role.id)}
                 >
                     Delete
                 </button>
