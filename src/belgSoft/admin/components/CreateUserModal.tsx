@@ -4,8 +4,8 @@ import {useRoleStore, useUiStore, useUsersStore, useUserStateStore} from "../../
 import * as Yup from "yup";
 import { getDirtyValues} from "../../../helpers/getDirtyValues.ts";
 import {ModalLayout} from "../../layouts/ModalLayout.tsx";
-import {ModalField} from "../../components/ModalField.tsx";
 import {firstCapitalLetter} from "../../../helpers/firstCapitalLetter.ts";
+import {ModalField} from "../../shared";
 
 export interface CreateUserModalProps extends Pick<User, "Id" | "username" | "email" | "roleId" | "planId" | "statusId" | "status" | "role"> {
     password: string;
